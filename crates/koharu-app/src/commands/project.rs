@@ -244,6 +244,26 @@ impl ProjectLibrary {
             .with_context(|| format!("failed to delete {}", path.display()))
     }
 
+    pub(crate) fn duplicate(&self, source: &str, name: &str) -> Result<()> {
+        let source_path = self.root.join(format!("{source}.khrproj"));
+        if !source_path.is_dir() {
+            bail!("project {source:?} does not exist");
+        }
+        let (name, destination) = self.resolve(name)?;
+        if destination.exists() {
+            bail!("a project named {name:?} already exists");
+        }
+        std::fs::create_dir_all(&destination)
+            .with_context(|| format!("failed to create {}", destination.display()))?;
+        copy_project(&source_path, &destination)
+            .with_context(|| format!("failed to clone {}", source_path.display()))?;
+        koharu_storage::rekey_project(&destination, koharu_storage::DocumentId::new())
+            .with_context(|| {
+                format!("failed to give {} a fresh identity", destination.display())
+            })?;
+        Ok(())
+    }
+
     fn resolve(&self, name: &str) -> Result<(String, PathBuf)> {
         let name = validate_project_name(name)?;
         Ok((name.clone(), self.root.join(format!("{name}.khrproj"))))
@@ -1255,6 +1275,34 @@ fn validate_project_name(name: &str) -> Result<String> {
         bail!("project name is reserved by Windows");
     }
     Ok(name.to_owned())
+}
+
+fn copy_project(source: &std::path::Path, destination: &std::path::Path) -> Result<()> {
+    fn copy_dir(source: &std::path::Path, destination: &std::path::Path) -> Result<()> {
+        std::fs::create_dir_all(destination)?;
+        let Some(entries) = std::fs::read_dir(source).ok() else {
+            return Ok(());
+        };
+        for entry in entries {
+            let entry = entry?;
+            let from = entry.path();
+            let to = destination.join(entry.file_name());
+            if entry.file_type()?.is_dir() {
+                copy_dir(&from, &to)?;
+            } else {
+                std::fs::copy(&from, &to)?;
+            }
+        }
+        Ok(())
+    }
+    copy_dir(&source.join("blobs"), &destination.join("blobs"))?;
+    for file in ["state-a.khr", "state-b.khr"] {
+        let from = source.join(file);
+        if from.is_file() {
+            std::fs::copy(&from, destination.join(file))?;
+        }
+    }
+    Ok(())
 }
 
 fn rasterize_stroke(

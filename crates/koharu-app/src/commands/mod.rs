@@ -69,6 +69,7 @@ pub fn bindings() -> tauri_specta::Builder<tauri::Cef> {
             lifecycle::get_page,
             lifecycle::list_projects,
             lifecycle::create_project,
+            lifecycle::clone_project,
             lifecycle::open_project,
             lifecycle::delete_project,
             lifecycle::close_project,

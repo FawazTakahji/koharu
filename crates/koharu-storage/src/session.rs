@@ -326,3 +326,13 @@ fn lock_project(root: &Path) -> Result<File> {
     })?;
     Ok(lock)
 }
+
+pub fn rekey_project(root: &Path, document: DocumentId) -> Result<()> {
+    for slot in [Slot::A, Slot::B] {
+        let Some(state) = format::load(root, slot)? else {
+            continue;
+        };
+        format::save(root, slot, &StoredState { document, ..state })?;
+    }
+    Ok(())
+}

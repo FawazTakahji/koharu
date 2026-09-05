@@ -464,6 +464,11 @@
     }
   },
   "start": {
+    "copy": "Copiar",
+    "copyDescription": "Crea una copia de “{{name}}” con otro nombre.",
+    "copyLabel": "Copiar {{name}}",
+    "copyTitle": "Copiar proyecto",
+    "copying": "Copiando…",
     "create": "Crear",
     "deleteAction": "Eliminar proyecto",
     "deleteDescription": "Esto elimina permanentemente “{{name}}” y todas sus páginas. Esta acción no se puede deshacer.",

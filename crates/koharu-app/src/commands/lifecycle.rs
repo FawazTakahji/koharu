@@ -333,6 +333,26 @@ pub(crate) async fn delete_project(
     Ok(())
 }
 
+#[tracing::instrument(
+    target = "koharu_metrics",
+    name = "project_cloned",
+    skip_all,
+    fields(origin = "user")
+)]
+#[tauri::command]
+#[specta::specta]
+pub(crate) async fn clone_project(
+    source: String,
+    name: String,
+    library: State<'_, ProjectLibrary>,
+) -> std::result::Result<(), Error> {
+    let library = library.inner().clone();
+    tokio::task::spawn_blocking(move || library.duplicate(&source, &name))
+        .await
+        .context("project clone worker stopped unexpectedly")??;
+    Ok(())
+}
+
 async fn close_current_project(handle: &AppHandle<Cef>) -> Result<()> {
     handle.state::<AgentState>().reset().await;
     let processing = handle.state::<Processing>();

@@ -464,6 +464,11 @@
     }
   },
   "start": {
+    "copy": "복사",
+    "copyDescription": "“{{name}}”을(를) 다른 이름으로 복사합니다.",
+    "copyLabel": "{{name}} 복사",
+    "copyTitle": "프로젝트 복사",
+    "copying": "복사 중…",
     "create": "만들기",
     "deleteAction": "프로젝트 삭제",
     "deleteDescription": "“{{name}}” 및 모든 페이지를 영구적으로 삭제합니다. 이 작업은 되돌릴 수 없습니다.",

@@ -2,7 +2,7 @@ use std::fs;
 
 use bytes::Bytes;
 
-use crate::{BlobId, DocumentId, Error, Revision, Session};
+use crate::{BlobId, DocumentId, Error, Revision, Session, rekey_project};
 
 fn blob_path(root: &std::path::Path, id: BlobId) -> std::path::PathBuf {
     let name = id.to_string();
@@ -146,6 +146,45 @@ async fn garbage_collection_keeps_both_slots_and_active_states() {
     let report = session.collect_garbage().await.unwrap();
     assert_eq!(report.blobs, 1);
     assert!(!blob_path(root.path(), id).exists());
+}
+
+#[tokio::test]
+async fn rekey_gives_both_slots_a_distinct_identity() {
+    let root = tempfile::tempdir().unwrap();
+    let original = DocumentId::new();
+    let session = Session::create(root.path(), original, Bytes::from_static(b"initial"))
+        .await
+        .unwrap();
+    let initial = session.load().await.unwrap();
+    let proposed = initial
+        .update(Revision::new(4), Bytes::from_static(b"updated"), [], [])
+        .unwrap();
+    session.save(&proposed).await.unwrap();
+    drop((initial, proposed, session));
+
+    let replacement = DocumentId::new();
+    assert_ne!(replacement, original);
+    rekey_project(root.path(), replacement).unwrap();
+    let reopened = Session::open(root.path()).await.unwrap();
+    let loaded = reopened.load().await.unwrap();
+    assert_eq!(loaded.document_id(), replacement);
+    assert_eq!(loaded.revision(), Revision::new(4));
+    assert_eq!(loaded.payload(), &Bytes::from_static(b"updated"));
+}
+
+#[tokio::test]
+async fn rekey_preserves_a_fresh_projects_only_slot() {
+    let root = tempfile::tempdir().unwrap();
+    let original = DocumentId::new();
+    let session = Session::create(root.path(), original, Bytes::new())
+        .await
+        .unwrap();
+    drop(session);
+
+    let replacement = DocumentId::new();
+    rekey_project(root.path(), replacement).unwrap();
+    let reopened = Session::open(root.path()).await.unwrap();
+    assert_eq!(reopened.document_id(), replacement);
 }
 
 #[tokio::test]

@@ -1,6 +1,6 @@
 'use client'
 
-import { Folder, FolderPlus, Plus, Settings, Trash2 } from 'lucide-react'
+import { Copy, Folder, FolderPlus, Plus, Settings, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,6 +20,14 @@ import {
   AlertDialogTitle,
 } from '@koharu/ui/components/alert-dialog'
 import { Button } from '@koharu/ui/components/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@koharu/ui/components/dialog'
 import { Input } from '@koharu/ui/components/input'
 import { ScrollArea } from '@koharu/ui/components/scroll-area'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@koharu/ui/components/tooltip'
@@ -31,6 +39,8 @@ export function StartView() {
   const [name, setName] = useState('')
   const [busy, setBusy] = useState<string | null>('list')
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null)
+  const [projectToClone, setProjectToClone] = useState<string | null>(null)
+  const [cloneName, setCloneName] = useState('')
 
   const reload = useCallback(async () => {
     setBusy('list')
@@ -83,7 +93,27 @@ export function StartView() {
     }
   }
 
+  const openCloneDialog = (projectName: string) => {
+    if (busy) return
+    setProjectToClone(projectName)
+    setCloneName(`${projectName} copy`)
+  }
+
+  const cloneProject = async () => {
+    const source = projectToClone
+    if (busy || !source) return
+    setBusy(source)
+    try {
+      await call(commands.cloneProject, source, cloneName.trim())
+      await reload()
+      setProjectToClone(null)
+    } finally {
+      setBusy(null)
+    }
+  }
+
   return (
+    <>
     <AlertDialog
       open={projectToDelete !== null}
       onOpenChange={(open) => {
@@ -232,6 +262,17 @@ export function StartView() {
                             type='button'
                             size='icon-sm'
                             variant='ghost'
+                            className='mr-1 size-7 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground focus-visible:opacity-100'
+                            aria-label={t('start.copyLabel', { name: project.name })}
+                            onClick={() => openCloneDialog(project.name)}
+                            disabled={busy !== null}
+                          >
+                            <Copy className='size-3.5' />
+                          </Button>
+                          <Button
+                            type='button'
+                            size='icon-sm'
+                            variant='ghost'
                             className='mr-2 size-7 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground focus-visible:opacity-100'
                             aria-label={t('start.deleteLabel', { name: project.name })}
                             onClick={() => setProjectToDelete(project.name)}
@@ -273,5 +314,50 @@ export function StartView() {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+
+    <Dialog
+      open={projectToClone !== null}
+      onOpenChange={(open) => {
+        if (!open && busy === null) setProjectToClone(null)
+      }}
+    >
+      <DialogContent className='sm:max-w-md'>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            cloneProject().catch(() => undefined)
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle>{t('start.copyTitle')}</DialogTitle>
+            <DialogDescription>
+              {t('start.copyDescription', { name: projectToClone })}
+            </DialogDescription>
+          </DialogHeader>
+          <Input
+            autoFocus
+            value={cloneName}
+            aria-label={t('start.projectName')}
+            placeholder={t('start.projectNamePlaceholder')}
+            className='mt-4'
+            onChange={(event) => setCloneName(event.currentTarget.value)}
+          />
+          <DialogFooter className='mt-4'>
+            <Button
+              type='button'
+              variant='ghost'
+              disabled={busy !== null}
+              onClick={() => setProjectToClone(null)}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button type='submit' disabled={!cloneName.trim() || busy !== null}>
+              {busy !== null ? t('start.copying') : t('start.copy')}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+    </>
   )
 }

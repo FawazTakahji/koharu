@@ -30,6 +30,7 @@ koharu-rasterizer = { workspace = true, features = ["native"] }
 koharu-runtime = { workspace = true }
 koharu-scene = { workspace = true }
 koharu-secrets = { workspace = true }
+koharu-storage = { workspace = true }
 koharu-translator = { workspace = true }
 open = { workspace = true }
 parking_lot = { workspace = true }

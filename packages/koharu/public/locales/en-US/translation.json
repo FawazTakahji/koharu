@@ -464,6 +464,11 @@
     }
   },
   "start": {
+    "copy": "Copy",
+    "copyDescription": "Create a copy of “{{name}}” under a new name.",
+    "copyLabel": "Copy {{name}}",
+    "copyTitle": "Copy project",
+    "copying": "Copying…",
     "create": "Create",
     "deleteAction": "Delete project",
     "deleteDescription": "This permanently deletes “{{name}}” and all of its pages. This action cannot be undone.",

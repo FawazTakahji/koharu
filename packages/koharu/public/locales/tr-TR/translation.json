@@ -464,6 +464,11 @@
     }
   },
   "start": {
+    "copy": "Kopyala",
+    "copyDescription": "“{{name}}” projesinin kopyasını yeni bir adla oluşturun.",
+    "copyLabel": "{{name}} projesini kopyala",
+    "copyTitle": "Projeyi kopyala",
+    "copying": "Kopyalanıyor…",
     "create": "Oluştur",
     "deleteAction": "Projeyi sil",
     "deleteDescription": "“{{name}}” ve tüm sayfaları kalıcı olarak silinir. Bu işlem geri alınamaz.",

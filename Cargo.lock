@@ -4781,6 +4781,7 @@ dependencies = [
  "koharu-runtime",
  "koharu-scene",
  "koharu-secrets",
+ "koharu-storage",
  "koharu-translator",
  "open",
  "parking_lot",

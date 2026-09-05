@@ -11,7 +11,7 @@ pub use blobs::Blobs;
 pub use bytes::Bytes;
 pub use error::{Error, Result};
 pub use ids::{BlobId, DocumentId, PatchId, Revision};
-pub use session::{GcReport, Session, State};
+pub use session::{GcReport, Session, State, rekey_project};
 
 #[cfg(test)]
 mod tests;

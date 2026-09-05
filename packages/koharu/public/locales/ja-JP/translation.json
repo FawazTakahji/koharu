@@ -464,6 +464,11 @@
     }
   },
   "start": {
+    "copy": "コピー",
+    "copyDescription": "「{{name}}」を別の名前でコピーします。",
+    "copyLabel": "{{name}} をコピー",
+    "copyTitle": "プロジェクトをコピー",
+    "copying": "コピー中…",
     "create": "作成",
     "deleteAction": "プロジェクトを削除",
     "deleteDescription": "「{{name}}」とその全ページを完全に削除します。この操作は元に戻せません。",
