@@ -9,6 +9,7 @@
     "predev": "kill-port 3000",
     "dev": "cargo tauri dev --features default",
     "build": "cargo tauri build --no-bundle",
+    "bundle:msi": "cargo tauri build --no-sign --bundles msi",
     "ui:dev": "bun run --filter @koharu/bridge build:dev && bun run --parallel --filter '@koharu/*' dev",
     "ui:build": "bun run --filter @koharu/bridge build && bun run --filter @koharu/app build",
     "docs:dev": "cd docs && uvx --from zensical==0.0.43 zensical serve",
