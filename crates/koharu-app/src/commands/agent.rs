@@ -10,7 +10,7 @@ use specta::Type;
 use tauri::{AppHandle, Cef, Manager as _, State, ipc::Channel};
 use tokio::sync::Notify;
 
-use self::host::KoharuHost;
+pub(crate) use self::host::KoharuHost;
 use super::Error;
 
 #[derive(Clone, Debug, Serialize, Type)]
