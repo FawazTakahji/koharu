@@ -64,7 +64,7 @@ pub(crate) async fn initialize(handle: AppHandle<Cef>) -> Result<()> {
     Ok(())
 }
 
-pub fn run(context: tauri::Context<Cef>) -> Result<()> {
+pub fn run(context: tauri::Context<Cef>, mcp_port: u16) -> Result<()> {
     let attrs = tauri::CefRuntimeAttributes::default();
     #[cfg(debug_assertions)]
     let attrs = attrs.command_line_args([
@@ -136,6 +136,13 @@ pub fn run(context: tauri::Context<Cef>) -> Result<()> {
             let handle = application.handle().clone();
             application.manage(koharu_desktop::Desktop::new()?);
             application.manage(AgentState::new(handle.clone())?);
+
+            let mcp_handle = handle.clone();
+            drop(tauri::async_runtime::spawn(async move {
+                if let Err(error) = crate::mcp::serve(mcp_handle, mcp_port).await {
+                    tracing::error!(%error, "the MCP server failed");
+                }
+            }));
 
             let window_config = application
                 .config()

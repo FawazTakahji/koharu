@@ -23,12 +23,12 @@ use crate::commands::{
 };
 
 #[derive(Clone)]
-pub(super) struct KoharuHost {
+pub(crate) struct KoharuHost {
     handle: AppHandle<Cef>,
 }
 
 impl KoharuHost {
-    pub(super) fn new(handle: AppHandle<Cef>) -> Self {
+    pub(crate) fn new(handle: AppHandle<Cef>) -> Self {
         Self { handle }
     }
 

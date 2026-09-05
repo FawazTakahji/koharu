@@ -43,6 +43,7 @@ Koharu introduces a local-first workflow for manga translation, utilizing the po
 - [Multilingual text shaping and layout](https://koharu.rs/workflow/typesetting/) with automatic fitting, font fallback, vertical CJK, and right-to-left text
 - [Layered PSD export](https://koharu.rs/workflow/export/) for flattened delivery and layered editing
 - [Agent-based workflow](https://koharu.rs/agent/work-with-projects/) for project inspection, editing, and pipeline control
+- Built-in [MCP server](#mcp-server) for integration with external AI agents
 
 ## Hardware Acceleration
 
@@ -157,6 +158,16 @@ Install on macOS with [Homebrew](https://brew.sh/):
 ```bash
 brew install --cask koharu
 ```
+
+### MCP Server
+
+Koharu exposes its project inspection, editing, and pipeline tools over a local [MCP](https://modelcontextprotocol.io/) Streamable HTTP server, so external AI agents can drive the same workflow as the built-in agent. The server listens on `127.0.0.1:41313` by default. Use the `--port` flag to change the port or `--port 0` to disable it:
+
+```bash
+koharu.exe --port 9999
+```
+
+Enter `http://127.0.0.1:9999/mcp` as the MCP server URL in your AI agent. No project needs to be open for the server to start; tools report an error until a project is loaded.
 
 ## Troubleshooting
 

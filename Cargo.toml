@@ -51,6 +51,7 @@ webp = { version = "0.3.1" }
 fast_image_resize = { version = "6.1.0", features = ["image", "rayon"] }
 anyhow = "1.0.104"
 async-trait = "0.1.92"
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio"] }
 backon = { version = "1.6.0", default-features = false, features = ["std", "tokio-sleep"] }
 imageproc = "0.27.0"
 ab_glyph = "0.2.32"
@@ -71,6 +72,7 @@ thiserror = "2.0.20"
 blake3 = "1.8.6"
 dunce = "1.0.5"
 rayon = "1.12.0"
+rmcp = { version = "3.2.0", default-features = false, features = ["server", "transport-streamable-http-server"] }
 # disables `esaxx_fast` feature which is conflicting with `ort`
 tokenizers = { version = "0.23.1", features = ["onig"] }
 strum = { version = "0.28.0", features = ["derive"] }
