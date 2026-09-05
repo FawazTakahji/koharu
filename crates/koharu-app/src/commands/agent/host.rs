@@ -6,7 +6,7 @@ use base64::{Engine as _, engine::general_purpose::STANDARD};
 use koharu_agent::{Control, Host, Invocation, Tool, ToolCall};
 use koharu_desktop::{Desktop, Frame};
 use koharu_pipeline::{Committer, Operation, RunStatus, Scope, Stage, StageOutput, StopToken};
-use koharu_scene::{Commit, EntityId, Snapshot};
+use koharu_scene::{Commit, EntityId, Snapshot, TextLayout as SceneTextLayout};
 use schemars::{JsonSchema, schema_for};
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -76,6 +76,54 @@ impl KoharuHost {
                 "available_fonts": fonts.into_iter().map(|font| font.name).collect::<Vec<_>>(),
             },
         }))
+    }
+
+    async fn list_pages(&self) -> Result<Value> {
+        let (project, pages) = {
+            let current = self.handle.state::<CurrentProject>();
+            let current = current.project.lock().await;
+            let project = current.as_ref().context("no project is open")?;
+            let snapshot = project.snapshot();
+            (project.info(), Project::pages(&snapshot)?)
+        };
+        Ok(json!({ "project": project, "pages": pages }))
+    }
+
+    async fn read_page_texts(&self, page: EntityId) -> Result<Value> {
+        let current = self.handle.state::<CurrentProject>();
+        let current = current.project.lock().await;
+        let project = current.as_ref().context("no project is open")?;
+        let snapshot = project.snapshot();
+        let label = snapshot.page(page)?.page()?.label;
+        let mut texts = Vec::new();
+        for entity in snapshot.descendants(page)? {
+            let element = entity.id();
+            if snapshot.component::<SceneTextLayout>(element)?.is_none() {
+                continue;
+            }
+            let content = snapshot.text_layer(element)?.content()?;
+            let source = content.source()?.map(|source| {
+                json!({
+                    "text": source.text.value,
+                    "language": source.language.map(|language| language.to_string()),
+                })
+            });
+            let translation = content.translation()?.map(|translation| {
+                json!({
+                    "text": translation.text.value,
+                    "language": translation.language.map(|language| language.to_string()),
+                })
+            });
+            texts.push(json!({
+                "element": element,
+                "parent": snapshot.parent(element)?,
+                "source": source,
+                "translation": translation,
+                "role": content.role()?.map(|role| role.role),
+                "source_region": content.source_region()?.map(|region| region.id()),
+            }));
+        }
+        Ok(json!({ "page": page, "label": label, "texts": texts }))
     }
 
     async fn mutate<T>(
@@ -190,9 +238,21 @@ impl Host for KoharuHost {
                         "inspect_project",
                         "Read the latest complete semantic project state after edits. This does not include page images.",
                     ),
+                    definition::<ListPages>(
+                        "list_pages",
+                        "List the project's pages with their ids, labels, and sizes without any layer data.",
+                    ),
+                    definition::<ReadPageTexts>(
+                        "read_page_texts",
+                        "Read only the text content (source and translation) for one page, without geometry, typography, or other layers.",
+                    ),
                     definition::<ViewPage>(
                         "view_page",
                         "Render and inspect one page image. Call this only for pages whose visual appearance matters to the request.",
+                    ),
+                    definition::<ViewOriginalPage>(
+                        "view_original_page",
+                        "Render and inspect the original, unedited source image of one page. Use this to compare against the edited page.",
                     ),
                     definition::<RenamePage>("rename_page", "Rename a project page."),
                     definition::<MovePage>("move_page", "Move a page to a zero-based project index."),
@@ -241,6 +301,15 @@ impl Host for KoharuHost {
                 let _: InspectProject = arguments(&call)?;
                 Invocation::read(self.project_context().await?)
             }
+            "list_pages" => {
+                let _: ListPages = arguments(&call)?;
+                Invocation::read(self.list_pages().await?)
+            }
+            "read_page_texts" => {
+                let arguments: ReadPageTexts = arguments(&call)?;
+                let page = entity(&arguments.page)?;
+                Invocation::read(self.read_page_texts(page).await?)
+            }
             "view_page" => {
                 let arguments: ViewPage = arguments(&call)?;
                 let page = entity(&arguments.page)?;
@@ -260,6 +329,25 @@ impl Host for KoharuHost {
                 Ok(
                     Invocation::read(json!({ "page": page, "label": label }))?.with_image(
                         format!("Rendered page {label} ({page})"),
+                        format!("data:image/webp;base64,{}", STANDARD.encode(bytes)),
+                    ),
+                )
+            }
+            "view_original_page" => {
+                let arguments: ViewOriginalPage = arguments(&call)?;
+                let page = entity(&arguments.page)?;
+                let (label, bytes) = {
+                    let current = self.handle.state::<CurrentProject>();
+                    let current = current.project.lock().await;
+                    let project = current.as_ref().context("no project is open")?;
+                    let snapshot = project.snapshot();
+                    let label = snapshot.page(page)?.page()?.label;
+                    let bytes = output::original_preview(&snapshot, page).await?;
+                    (label, bytes)
+                };
+                Ok(
+                    Invocation::read(json!({ "page": page, "label": label }))?.with_image(
+                        format!("Original page {label} ({page})"),
                         format!("data:image/webp;base64,{}", STANDARD.encode(bytes)),
                     ),
                 )
@@ -504,7 +592,20 @@ fn entities(values: &[String]) -> Result<Vec<EntityId>> {
 struct InspectProject {}
 
 #[derive(Deserialize, JsonSchema)]
+struct ListPages {}
+
+#[derive(Deserialize, JsonSchema)]
+struct ReadPageTexts {
+    page: String,
+}
+
+#[derive(Deserialize, JsonSchema)]
 struct ViewPage {
+    page: String,
+}
+
+#[derive(Deserialize, JsonSchema)]
+struct ViewOriginalPage {
     page: String,
 }
 

@@ -217,6 +217,30 @@ pub(crate) async fn rendered_preview(
     .context("preview encode worker stopped unexpectedly")?
 }
 
+/// Encode the page's untouched source image as a preview, matching the framing
+/// of [`rendered_preview`] so edited and original pages compare pixel-for-pixel.
+pub(crate) async fn original_preview(snapshot: &Snapshot, page: EntityId) -> Result<Vec<u8>> {
+    snapshot.page(page)?;
+    let blob = snapshot
+        .asset(page, &AssetRole::new("source")?)?
+        .with_context(|| format!("page {page} has no source image"))?
+        .blob;
+    let bytes = snapshot.read_blob(blob).await?;
+    tokio::task::spawn_blocking(move || {
+        let image = image::load_from_memory(&bytes).context("failed to decode source image")?;
+        if image.width() == 0 || image.height() == 0 {
+            return Err(anyhow::anyhow!("source image is empty"));
+        }
+        let image = image
+            .resize(1024, 1024, image::imageops::FilterType::Lanczos3)
+            .to_rgba8();
+        let encoder = webp::Encoder::from_rgba(image.as_raw(), image.width(), image.height());
+        Ok::<_, anyhow::Error>(encoder.encode(85.0).to_vec())
+    })
+    .await
+    .context("preview encode worker stopped unexpectedly")?
+}
+
 async fn rasterize(
     rasterizer: Arc<Rasterizer>,
     frame: &Frame,
