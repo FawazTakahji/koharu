@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "選擇用於處理每個頁面的模型和選項。",
       "modelLabel": "{{stage}}模型",
+      "officialTorch": "使用官方 PyTorch 建置",
+      "officialTorchDescription": "將 Koharu 內建建置取代為官方建置。可能提升 CPU 推理速度。",
       "options": {
         "bubbleThreshold": "對話框閾值",
         "negativePrompt": "負面提示詞",
@@ -390,6 +392,8 @@
         "textThreshold": "文字閾值"
       },
       "processing": "正在處理",
+      "restartRequired": "需要重新啟動",
+      "runtime": "執行環境",
       "stages": {
         "detection": {
           "description": "尋找文字、對話框和分鏡。",

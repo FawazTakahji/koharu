@@ -3,6 +3,7 @@ use std::fmt;
 use anyhow::Result;
 use koharu_pipeline::PipelineConfig;
 use koharu_renderer::TypesettingConfig;
+use koharu_runtime::RuntimeConfig;
 use koharu_secrets::ExposeSecret as _;
 use koharu_translator::{Language, Model, Provider, ProviderConfig, ProvidersConfig};
 use serde::{Deserialize, Serialize};
@@ -15,6 +16,7 @@ pub struct Preferences {
     pub pipeline: PipelineConfig,
     pub providers: ProviderPreferences,
     pub typesetting: TypesettingConfig,
+    pub runtime: RuntimeConfig,
     pub languages: Vec<LanguageChoice>,
 }
 
@@ -23,13 +25,16 @@ impl Preferences {
         let pipeline = PipelineConfig::load()?;
         let providers = ProvidersConfig::load()?;
         let typesetting = TypesettingConfig::load()?;
+        let runtime = RuntimeConfig::load()?;
         let pipeline = pipeline.read()?;
         let providers = providers.read()?;
         let typesetting = typesetting.read()?;
+        let runtime = runtime.read()?;
         Ok(Self {
             pipeline: pipeline.clone(),
             providers: ProviderPreferences::from_config(&providers)?,
             typesetting: typesetting.clone(),
+            runtime: *runtime,
             languages: Language::ALL
                 .iter()
                 .map(|language| LanguageChoice {
@@ -160,12 +165,14 @@ pub(crate) async fn save_preferences(
     mut pipeline: PipelineConfig,
     providers: ProviderPreferences,
     typesetting: TypesettingConfig,
+    runtime: RuntimeConfig,
 ) -> std::result::Result<Preferences, Error> {
     remember_pipeline_profiles(&mut pipeline);
     let providers = providers.into_config()?;
     let pipeline_config = PipelineConfig::load()?;
     let providers_config = ProvidersConfig::load()?;
     let typesetting_config = TypesettingConfig::load()?;
+    let runtime_config = RuntimeConfig::load()?;
     {
         let mut current = pipeline_config.write()?;
         *current = pipeline;
@@ -179,6 +186,11 @@ pub(crate) async fn save_preferences(
     {
         let mut current = typesetting_config.write()?;
         *current = typesetting;
+        current.save()?;
+    }
+    {
+        let mut current = runtime_config.write()?;
+        *current = runtime;
         current.save()?;
     }
     let preferences = Preferences::load()?;

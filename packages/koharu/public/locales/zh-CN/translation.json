@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "选择用于处理每个页面的模型和选项。",
       "modelLabel": "{{stage}}模型",
+      "officialTorch": "使用官方 PyTorch 构建",
+      "officialTorchDescription": "将 Koharu 内置构建替换为官方构建。可能提升 CPU 推理速度。",
       "options": {
         "bubbleThreshold": "气泡阈值",
         "negativePrompt": "负面提示词",
@@ -390,6 +392,8 @@
         "textThreshold": "文本阈值"
       },
       "processing": "正在处理",
+      "restartRequired": "需要重启",
+      "runtime": "运行时",
       "stages": {
         "detection": {
           "description": "查找文本、气泡和分镜。",

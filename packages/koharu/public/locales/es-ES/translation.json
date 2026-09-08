@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "Elige los modelos y opciones usados para procesar cada página.",
       "modelLabel": "Modelo de {{stage}}",
+      "officialTorch": "Usar compilaciones oficiales de PyTorch",
+      "officialTorchDescription": "Sustituye la compilación incluida con Koharu por la oficial. Puede mejorar la velocidad de inferencia en CPU.",
       "options": {
         "bubbleThreshold": "Umbral de bocadillo",
         "negativePrompt": "Indicación negativa",
@@ -390,6 +392,8 @@
         "textThreshold": "Umbral de texto"
       },
       "processing": "Procesando",
+      "restartRequired": "Requiere reinicio",
+      "runtime": "Tiempo de ejecución",
       "stages": {
         "detection": {
           "description": "Encuentra texto, bocadillos y viñetas.",

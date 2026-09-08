@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "Выберите модели и параметры обработки каждой страницы.",
       "modelLabel": "Модель «{{stage}}»",
+      "officialTorch": "Использовать официальные сборки PyTorch",
+      "officialTorchDescription": "Заменяет встроенную сборку Koharu на официальную. Может ускорить вывод на CPU.",
       "options": {
         "bubbleThreshold": "Порог пузыря",
         "negativePrompt": "Негативный промпт",
@@ -390,6 +392,8 @@
         "textThreshold": "Порог текста"
       },
       "processing": "Обработка",
+      "restartRequired": "Требуется перезапуск",
+      "runtime": "Среда выполнения",
       "stages": {
         "detection": {
           "description": "Находит текст, пузыри и панели.",

@@ -89,6 +89,7 @@ const textLayer: Layer = {
 }
 
 const preferences: Preferences = {
+  runtime: { torch_source: 'bundled' },
   pipeline: {
     detection: { model: 'koharu-layout-rfdetr-seg-2xl' },
     ocr: { model: 'paddleocr-vl-1.6' },
@@ -883,6 +884,7 @@ describe('greenfield editor', () => {
         nextPreferences.pipeline,
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
     expect(
@@ -1004,6 +1006,7 @@ describe('greenfield editor', () => {
         nextPreferences.pipeline,
         currentPreferences.providers,
         currentPreferences.typesetting,
+        currentPreferences.runtime,
       ),
     )
     expect(useKoharuStore.getState().preferences?.pipeline.translation).toEqual(
@@ -1059,6 +1062,7 @@ describe('greenfield editor', () => {
         nextPreferences.pipeline,
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
     expect(useKoharuStore.getState().preferences?.pipeline.translation).toEqual(
@@ -1123,6 +1127,7 @@ describe('greenfield editor', () => {
         }),
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
     fireEvent.click(screen.getByRole('button', { name: 'Providers' }))
@@ -1151,6 +1156,7 @@ describe('greenfield editor', () => {
         }),
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
     const vision = screen.getByRole('switch', { name: 'Vision' })
@@ -1167,6 +1173,7 @@ describe('greenfield editor', () => {
         }),
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
     expect(screen.getByLabelText('Translation model')).toHaveTextContent('Gemma 4 E2B Instruct')
@@ -1249,6 +1256,7 @@ describe('greenfield editor', () => {
         }),
         configured.providers,
         configured.typesetting,
+        configured.runtime,
       ),
     )
   })
@@ -1356,6 +1364,7 @@ describe('greenfield editor', () => {
         }),
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ),
     )
   })
@@ -1502,15 +1511,25 @@ describe('greenfield editor', () => {
     await user.click(await screen.findByRole('option', { name: 'Arial, System' }))
 
     await waitFor(() =>
-      expect(save).toHaveBeenLastCalledWith(preferences.pipeline, preferences.providers, {
-        font_families: ['Noto Sans', 'Arial'],
-      }),
+      expect(save).toHaveBeenLastCalledWith(
+        preferences.pipeline,
+        preferences.providers,
+        {
+          font_families: ['Noto Sans', 'Arial'],
+        },
+        preferences.runtime,
+      ),
     )
     await user.click(screen.getByRole('button', { name: 'Remove Noto Sans' }))
     await waitFor(() =>
-      expect(save).toHaveBeenLastCalledWith(preferences.pipeline, preferences.providers, {
-        font_families: ['Arial'],
-      }),
+      expect(save).toHaveBeenLastCalledWith(
+        preferences.pipeline,
+        preferences.providers,
+        {
+          font_families: ['Arial'],
+        },
+        preferences.runtime,
+      ),
     )
   })
 

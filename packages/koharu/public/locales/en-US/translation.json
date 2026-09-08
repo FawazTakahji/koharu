@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "Choose the models and options used to process each page.",
       "modelLabel": "{{stage}} model",
+      "officialTorch": "Use official PyTorch builds",
+      "officialTorchDescription": "Replaces Koharu's bundled build with the official one. May improve CPU inference speed.",
       "options": {
         "bubbleThreshold": "Bubble threshold",
         "negativePrompt": "Negative prompt",
@@ -390,6 +392,8 @@
         "textThreshold": "Text threshold"
       },
       "processing": "Processing",
+      "restartRequired": "Restart required",
+      "runtime": "Runtime",
       "stages": {
         "detection": {
           "description": "Find text, speech bubbles, and panels.",

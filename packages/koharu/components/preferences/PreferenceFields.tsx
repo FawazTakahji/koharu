@@ -55,7 +55,7 @@ export function PreferenceRow({
   children,
   align = 'center',
 }: {
-  title: string
+  title: React.ReactNode
   description?: string
   children: React.ReactNode
   align?: 'center' | 'start'

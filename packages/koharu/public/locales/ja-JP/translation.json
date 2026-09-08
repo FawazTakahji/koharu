@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "各ページの処理に使用するモデルとオプションを選択します。",
       "modelLabel": "{{stage}}モデル",
+      "officialTorch": "公式 PyTorch ビルドを使用",
+      "officialTorchDescription": "Koharu 同梱のビルドを公式のビルドに置き換えます。CPU 推論が速くなる場合があります。",
       "options": {
         "bubbleThreshold": "吹き出ししきい値",
         "negativePrompt": "ネガティブプロンプト",
@@ -390,6 +392,8 @@
         "textThreshold": "テキストしきい値"
       },
       "processing": "処理中",
+      "restartRequired": "再起動が必要",
+      "runtime": "ランタイム",
       "stages": {
         "detection": {
           "description": "テキスト、吹き出し、コマを検出します。",

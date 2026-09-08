@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "Her sayfayı işlemek için kullanılan modelleri ve seçenekleri seçin.",
       "modelLabel": "{{stage}} modeli",
+      "officialTorch": "Resmî PyTorch derlemelerini kullan",
+      "officialTorchDescription": "Koharu'nun paketlenmiş derlemesini resmî derlemeyle değiştirir. CPU çıkarım hızını iyileştirebilir.",
       "options": {
         "bubbleThreshold": "Konuşma balonu eşiği",
         "negativePrompt": "Negatif istem",
@@ -390,6 +392,8 @@
         "textThreshold": "Metin eşiği"
       },
       "processing": "İşleniyor",
+      "restartRequired": "Yeniden başlatma gerekli",
+      "runtime": "Çalışma zamanı",
       "stages": {
         "detection": {
           "description": "Metinleri, konuşma balonlarını ve panelleri bulur.",

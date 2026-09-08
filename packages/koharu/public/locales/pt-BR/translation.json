@@ -382,6 +382,8 @@
     "pipeline": {
       "description": "Escolha os modelos e opções usados para processar cada página.",
       "modelLabel": "Modelo de {{stage}}",
+      "officialTorch": "Usar builds oficiais do PyTorch",
+      "officialTorchDescription": "Substitui a build incluída no Koharu pela oficial. Pode melhorar a velocidade da inferência em CPU.",
       "options": {
         "bubbleThreshold": "Limite de balão",
         "negativePrompt": "Prompt negativo",
@@ -390,6 +392,8 @@
         "textThreshold": "Limite de texto"
       },
       "processing": "Processando",
+      "restartRequired": "Requer reinicialização",
+      "runtime": "Tempo de execução",
       "stages": {
         "detection": {
           "description": "Encontra texto, balões e quadros.",

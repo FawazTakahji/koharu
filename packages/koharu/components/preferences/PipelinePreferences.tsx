@@ -20,7 +20,8 @@ import {
   PreferenceSection,
   TextField,
 } from '@/components/preferences/PreferenceFields'
-import type { PipelineConfig } from '@koharu/bridge/protocol'
+import type { PipelineConfig, RuntimeConfig } from '@koharu/bridge/protocol'
+import { Badge } from '@koharu/ui/components/badge'
 import {
   Select,
   SelectContent,
@@ -28,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@koharu/ui/components/select'
+import { Switch } from '@koharu/ui/components/switch'
 
 const stages = [
   ['detection', Search],
@@ -37,10 +39,14 @@ const stages = [
 
 export function PipelinePreferences({
   value,
+  runtime,
   onChange,
+  onRuntimeChange,
 }: {
   value: PipelineConfig
+  runtime: RuntimeConfig
   onChange: (value: PipelineConfig) => void
+  onRuntimeChange: (value: RuntimeConfig) => void
 }) {
   const { t } = useTranslation()
   return (
@@ -96,6 +102,29 @@ export function PipelinePreferences({
             </PreferenceRow>
           )
         })}
+      </PreferenceSection>
+      <PreferenceSection title={t('settings.pipeline.runtime')}>
+        <PreferenceRow
+          title={
+            <span className='flex min-w-0 items-center gap-2'>
+              {t('settings.pipeline.officialTorch')}
+              <Badge variant='outline' className='shrink-0 px-1.5 py-0 text-[9px] font-medium'>
+                {t('settings.pipeline.restartRequired')}
+              </Badge>
+            </span>
+          }
+          description={t('settings.pipeline.officialTorchDescription')}
+        >
+          <div className='flex h-8 items-center justify-end'>
+            <Switch
+              aria-label={t('settings.pipeline.officialTorch')}
+              checked={runtime.torch_source === 'official'}
+              onCheckedChange={(official) =>
+                onRuntimeChange({ ...runtime, torch_source: official ? 'official' : 'bundled' })
+              }
+            />
+          </div>
+        </PreferenceRow>
       </PreferenceSection>
     </PreferencePage>
   )

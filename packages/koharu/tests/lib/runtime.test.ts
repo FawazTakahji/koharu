@@ -25,6 +25,7 @@ vi.mock('@tauri-apps/api/core', () => ({
 }))
 
 const preferences: Preferences = {
+  runtime: { torch_source: 'bundled' },
   pipeline: {
     detection: { model: 'koharu-layout-rfdetr-seg-2xl' },
     ocr: { model: 'paddleocr-vl-1.6' },

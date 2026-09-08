@@ -32,6 +32,7 @@ import {
   type PipelineConfig,
   type Preferences,
   type ProviderPreferences as ProviderSettings,
+  type RuntimeConfig,
   type TypesettingConfig,
 } from '@koharu/bridge/protocol'
 import { Button } from '@koharu/ui/components/button'
@@ -69,6 +70,7 @@ export function SettingsPage() {
   const [typesetting, setTypesetting] = useState<TypesettingConfig | null>(
     preferences?.typesetting ?? null,
   )
+  const [runtime, setRuntime] = useState<RuntimeConfig | null>(preferences?.runtime ?? null)
   const translation = pipeline?.translation ?? null
   const lastSaved = useRef<string | null>(null)
   const lastSavedProviders = useRef<string | null>(null)
@@ -77,15 +79,18 @@ export function SettingsPage() {
   const lastPending = useRef<{ serialized: string; promise: Promise<Preferences> } | null>(null)
   const currentDraft = useRef<string | null>(null)
   currentDraft.current =
-    pipeline && providers && typesetting ? JSON.stringify([pipeline, providers, typesetting]) : null
+    pipeline && providers && typesetting && runtime
+      ? JSON.stringify([pipeline, providers, typesetting, runtime])
+      : null
 
   const saveDraft = useCallback(
     async (
       pipeline: PipelineConfig,
       providers: ProviderSettings,
       typesetting: TypesettingConfig,
+      runtime: RuntimeConfig,
     ) => {
-      const serialized = JSON.stringify([pipeline, providers, typesetting])
+      const serialized = JSON.stringify([pipeline, providers, typesetting, runtime])
       if (serialized === lastSaved.current) {
         const pending = lastPending.current
         if (pending?.serialized === serialized) await pending.promise
@@ -97,7 +102,7 @@ export function SettingsPage() {
       const generation = ++saveGeneration.current
       const pending = saveQueue.current
         .catch(() => undefined)
-        .then(() => savePreferences(pipeline, providers, typesetting))
+        .then(() => savePreferences(pipeline, providers, typesetting, runtime))
       lastPending.current = { serialized, promise: pending }
       saveQueue.current = pending.then(
         () => undefined,
@@ -131,25 +136,27 @@ export function SettingsPage() {
     setPipeline(preferences?.pipeline ?? null)
     setProviders(preferences?.providers ?? null)
     setTypesetting(preferences?.typesetting ?? null)
+    setRuntime(preferences?.runtime ?? null)
     if (preferences) {
       lastSaved.current = JSON.stringify([
         preferences.pipeline,
         preferences.providers,
         preferences.typesetting,
+        preferences.runtime,
       ])
       lastSavedProviders.current = JSON.stringify(preferences.providers)
     }
   }, [open, preferences])
 
   useEffect(() => {
-    if (!open || !pipeline || !providers || !typesetting) return
-    const serialized = JSON.stringify([pipeline, providers, typesetting])
+    if (!open || !pipeline || !providers || !typesetting || !runtime) return
+    const serialized = JSON.stringify([pipeline, providers, typesetting, runtime])
     if (serialized === lastSaved.current) return
     const timeout = window.setTimeout(() => {
-      void saveDraft(pipeline, providers, typesetting).catch(() => undefined)
+      void saveDraft(pipeline, providers, typesetting, runtime).catch(() => undefined)
     }, 260)
     return () => window.clearTimeout(timeout)
-  }, [open, pipeline, providers, saveDraft, typesetting])
+  }, [open, pipeline, providers, runtime, saveDraft, typesetting])
 
   if (!open) return null
 
@@ -161,11 +168,11 @@ export function SettingsPage() {
           variant='ghost'
           className='mb-5 h-9 justify-start gap-2 rounded-lg px-2 text-[12px] text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground'
           onClick={() => {
-            if (!pipeline || !providers || !typesetting) {
+            if (!pipeline || !providers || !typesetting || !runtime) {
               setOpen(false)
               return
             }
-            void saveDraft(pipeline, providers, typesetting)
+            void saveDraft(pipeline, providers, typesetting, runtime)
               .then(() => setOpen(false))
               .catch(() => undefined)
           }}
@@ -199,8 +206,13 @@ export function SettingsPage() {
           <div className='mx-auto w-full max-w-4xl px-10 py-10'>
             {tab === 'appearance' && <AppearancePreferences />}
             {tab === 'pipeline' &&
-              (pipeline ? (
-                <PipelinePreferences value={pipeline} onChange={setPipeline} />
+              (pipeline && runtime ? (
+                <PipelinePreferences
+                  value={pipeline}
+                  runtime={runtime}
+                  onChange={setPipeline}
+                  onRuntimeChange={setRuntime}
+                />
               ) : (
                 <LoadingPreferences />
               ))}
