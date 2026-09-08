@@ -51,6 +51,14 @@ pub async fn init() -> anyhow::Result<()> {
                 .initialize()
                 .await
                 .context("failed to initialize runtimes")?;
+            // The build's capabilities are reported alongside the device.
+            tracing::info!(
+                "torch build supports: openmp={} mkl={} mkldnn={} lapack={}",
+                torch::has_openmp(),
+                torch::has_mkl(),
+                torch::has_mkldnn(),
+                torch::has_lapack(),
+            );
 
             LLAMA
                 .get_or_try_init(|| async {

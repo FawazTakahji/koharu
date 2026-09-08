@@ -2,8 +2,8 @@
 pub mod utils;
 
 pub use utils::{
-    get_num_interop_threads, get_num_threads, manual_seed, set_num_interop_threads,
-    set_num_threads, QEngine,
+    get_num_interop_threads, get_num_threads, has_lapack, has_mkl, has_mkldnn, has_openmp,
+    manual_seed, set_num_interop_threads, set_num_threads, QEngine,
 };
 
 pub(crate) mod device;
