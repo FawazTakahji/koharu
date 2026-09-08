@@ -1,19 +1,33 @@
-use std::{env, path::Path};
+use std::{
+    env, fs,
+    path::{Path, PathBuf},
+};
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use koharu_bindgen::Generator;
+use koharu_runtime::{Torch, TorchSource};
 
 const SHIM_LIBRARY_NAME: &str = "koharu-torch";
 const OPAQUE_TYPES: &str = "^(tensor|scalar|optimizer|torch_module|ivalue)$";
 const TORCH_API_HEADER: &str = "libtch/torch_api.h";
 const TORCH_API_GENERATED_HEADER: &str = "libtch/torch_api_generated.h";
-const RERUN_IF_CHANGED: &[&str] = &["build.rs", TORCH_API_HEADER, TORCH_API_GENERATED_HEADER];
+const RERUN_IF_CHANGED: &[&str] = &[
+    "build.rs",
+    "libtch/CMakeLists.txt",
+    "libtch/torch_api.cpp",
+    TORCH_API_HEADER,
+    "libtch/torch_api_generated.cpp",
+    TORCH_API_GENERATED_HEADER,
+];
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     for path in RERUN_IF_CHANGED {
         println!("cargo:rerun-if-changed={path}");
     }
-    generate_bindings(Path::new(&env::var("OUT_DIR")?))
+    let out_dir = PathBuf::from(env::var("OUT_DIR")?);
+    generate_bindings(&out_dir)?;
+    build_shim().await
 }
 
 fn generate_bindings(out_dir: &Path) -> Result<()> {
@@ -35,4 +49,74 @@ fn generate_bindings(out_dir: &Path) -> Result<()> {
 fn generator(header: impl AsRef<Path>) -> Generator {
     Generator::from_header(header, SHIM_LIBRARY_NAME)
         .with_bindgen(|builder| builder.layout_tests(false).blocklist_type(OPAQUE_TYPES))
+}
+
+async fn build_shim() -> Result<()> {
+    let target_dir = target_dir()?;
+    fs::create_dir_all(&target_dir)?;
+
+    let libtorch_dir = Torch::Cpu
+        .install_with(TorchSource::Official)
+        .await?
+        .join("libtorch");
+    let mut config = cmake::Config::new("libtch");
+    config
+        .define("KOHARU_TORCH_ROOT", &libtorch_dir)
+        .profile("Release");
+    if cfg!(windows) {
+        config
+            .generator("Ninja")
+            .define("CMAKE_MAKE_PROGRAM", "ninja")
+            .define("CMAKE_C_COMPILER", "clang-cl")
+            .define("CMAKE_CXX_COMPILER", "clang-cl");
+    }
+    let cmake_dir = config.build();
+
+    for profile in ["debug", "release"] {
+        let profile_dir = target_dir.join(profile);
+        fs::create_dir_all(&profile_dir)?;
+        fs::copy(
+            cmake_dir.join(shim_file_name()),
+            profile_dir.join(shim_file_name()),
+        )?;
+    }
+
+    println!(
+        "cargo::metadata=shim={}",
+        target_dir.join("release").join(shim_file_name()).display()
+    );
+
+    Ok(())
+}
+
+fn target_dir() -> Result<PathBuf> {
+    let out_dir = PathBuf::from(env::var("OUT_DIR")?);
+    let profile_dir = out_dir
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::parent)
+        .context("koharu-torch-sys OUT_DIR has no profile directory")?;
+    let target_dir = profile_dir
+        .parent()
+        .context("koharu-torch-sys OUT_DIR has no target directory")?;
+    let target = env::var_os("TARGET").context("Cargo did not provide TARGET")?;
+
+    if target_dir.file_name() == Some(target.as_os_str()) {
+        target_dir
+            .parent()
+            .map(Path::to_path_buf)
+            .context("koharu-torch-sys target triple has no target directory")
+    } else {
+        Ok(target_dir.to_path_buf())
+    }
+}
+
+fn shim_file_name() -> &'static str {
+    if cfg!(windows) {
+        "koharu-torch.dll"
+    } else if cfg!(target_os = "macos") {
+        "libkoharu-torch.dylib"
+    } else {
+        "libkoharu-torch.so"
+    }
 }
