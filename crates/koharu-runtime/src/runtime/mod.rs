@@ -1,3 +1,4 @@
+mod config;
 mod graph;
 mod loader;
 mod packages;
@@ -10,6 +11,7 @@ use crate::{Device, Hardware};
 use graph::{Component, Plan};
 use packages::{Diffusion, Llama};
 
+pub use config::{RuntimeConfig, TorchSource};
 pub use packages::Torch;
 
 mod sealed {

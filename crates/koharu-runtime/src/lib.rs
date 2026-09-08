@@ -9,7 +9,7 @@ pub mod download;
 
 pub use device::{Backend, Device, DeviceType};
 pub use hardware::Hardware;
-pub use runtime::{Feature, Package, Runtime, Torch};
+pub use runtime::{Feature, Package, Runtime, RuntimeConfig, Torch, TorchSource};
 pub use source::HuggingFaceFile;
 pub use store::Store;
 
