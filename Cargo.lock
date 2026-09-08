@@ -4763,7 +4763,7 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 
 [[package]]
 name = "koharu"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "clap",
  "console",
@@ -4786,7 +4786,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-agent"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4807,7 +4807,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-app"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "alphanumeric-sort",
  "anyhow",
@@ -4861,7 +4861,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-bindgen"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "bindgen",
@@ -4874,7 +4874,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-canvas"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "futures-channel",
  "js-sys",
@@ -4889,7 +4889,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-config"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "atomicwrites",
@@ -4903,7 +4903,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-desktop"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "koharu-rasterizer",
@@ -4918,7 +4918,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-diffusion"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "image",
  "koharu-diffusion-sys",
@@ -4928,7 +4928,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-diffusion-sys"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "koharu-bindgen",
@@ -4938,7 +4938,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-llama"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "encoding_rs",
  "enumflags2",
@@ -4953,7 +4953,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-llama-sys"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "koharu-bindgen",
@@ -4963,7 +4963,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-metrics"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "blake3",
@@ -4983,7 +4983,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-ml"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -5014,7 +5014,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-pipeline"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -5043,7 +5043,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-psd"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "image",
  "koharu-rasterizer",
@@ -5056,7 +5056,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-rasterizer"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "blake3",
@@ -5072,7 +5072,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-renderer"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -5105,7 +5105,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-runtime"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "backon",
@@ -5137,7 +5137,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-scene"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "blake3",
  "bytes",
@@ -5159,7 +5159,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-secrets"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "keyring",
@@ -5171,7 +5171,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-storage"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "blake3",
  "bytes",
@@ -5191,7 +5191,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-torch"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "half",
  "image",
@@ -5207,7 +5207,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-torch-sys"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "koharu-bindgen",
@@ -5217,7 +5217,7 @@ dependencies = [
 
 [[package]]
 name = "koharu-translator"
-version = "0.81.7"
+version = "0.81.8"
 dependencies = [
  "anyhow",
  "base64 0.23.1",
@@ -9537,7 +9537,7 @@ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 [[package]]
 name = "tauri"
 version = "2.11.5"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "anyhow",
  "bytes",
@@ -9588,7 +9588,7 @@ dependencies = [
 [[package]]
 name = "tauri-build"
 version = "2.6.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "anyhow",
  "cargo_toml",
@@ -9608,7 +9608,7 @@ dependencies = [
 [[package]]
 name = "tauri-codegen"
 version = "2.6.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "base64 0.22.1",
  "brotli",
@@ -9634,7 +9634,7 @@ dependencies = [
 [[package]]
 name = "tauri-macros"
 version = "2.6.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -9647,7 +9647,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin"
 version = "2.6.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "anyhow",
  "glob",
@@ -9772,7 +9772,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime"
 version = "2.11.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "cookie",
  "dpi",
@@ -9793,7 +9793,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime-cef"
 version = "0.1.0"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "base64 0.22.1",
  "cef",
@@ -9828,7 +9828,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime-wry"
 version = "2.11.4"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "gtk",
  "http 1.5.0",
@@ -9885,7 +9885,7 @@ dependencies = [
 [[package]]
 name = "tauri-utils"
 version = "2.9.3"
-source = "git+https://github.com/tauri-apps/tauri?rev=6f34826405b5908cd5c6fea7f38e33badb69ad54#6f34826405b5908cd5c6fea7f38e33badb69ad54"
+source = "git+https://github.com/tauri-apps/tauri?rev=536664d1b34e1989dbd22705e2fde8b57b36aa0c#536664d1b34e1989dbd22705e2fde8b57b36aa0c"
 dependencies = [
  "anyhow",
  "brotli",

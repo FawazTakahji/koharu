@@ -4,7 +4,7 @@ default-members = ["crates/koharu"]
 resolver = "3"
 
 [workspace.package]
-version = "0.81.7"
+version = "0.81.8"
 edition = "2024"
 description = "Manga translation tools"
 license = "MIT OR Apache-2.0"
@@ -122,7 +122,7 @@ jieba-rs = "0.10.3"
 fontique = "0.11.0"
 pollster = "1.0.1"
 vello = "0.10.0"
-tauri = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54", default-features = false, features = [
+tauri = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c", default-features = false, features = [
     "cef",
     "compression",
     "dbus",
@@ -130,9 +130,8 @@ tauri = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5
     "macos-private-api",
     "specta",
     "x11",
-    "devtools",
 ] }
-tauri-build = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
+tauri-build = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
 tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", rev = "1423992771e0b57582ca3b06a6adc46ec26aa784" }
 tauri-plugin-opener = { git = "https://github.com/tauri-apps/plugins-workspace", rev = "1423992771e0b57582ca3b06a6adc46ec26aa784" }
 tauri-plugin-process = { git = "https://github.com/tauri-apps/plugins-workspace", rev = "1423992771e0b57582ca3b06a6adc46ec26aa784" }
@@ -178,13 +177,13 @@ libc = "0.2.189"
 memmap2 = "0.9.11"
 
 [patch.crates-io]
-tauri = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-build = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-codegen = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-macros = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-plugin = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-runtime = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
-tauri-utils = { git = "https://github.com/tauri-apps/tauri", rev = "6f34826405b5908cd5c6fea7f38e33badb69ad54" }
+tauri = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-build = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-codegen = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-macros = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-plugin = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-runtime = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
+tauri-utils = { git = "https://github.com/tauri-apps/tauri", rev = "536664d1b34e1989dbd22705e2fde8b57b36aa0c" }
 
 [profile.dev]
 debug = 1

@@ -73,7 +73,6 @@ pub fn run(context: tauri::Context<Cef>, mcp_port: u16) -> Result<()> {
     ]);
     #[cfg(target_os = "linux")]
     let attrs = attrs.command_line_args([
-        ("--no-first-run", None),
         ("--enable-unsafe-webgpu", None),
         ("enable-features", Some("Vulkan,VulkanFromANGLE")),
         ("use-angle", Some("vulkan")),

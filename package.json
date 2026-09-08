@@ -5,15 +5,17 @@
   ],
   "scripts": {
     "tauri": "cargo tauri",
-    "postinstall": "cargo install --git https://github.com/tauri-apps/tauri --rev 6f34826405b5908cd5c6fea7f38e33badb69ad54 --locked tauri-cli",
+    "postinstall": "cargo install --git https://github.com/tauri-apps/tauri --rev 536664d1b34e1989dbd22705e2fde8b57b36aa0c --locked tauri-cli",
     "predev": "kill-port 3000",
     "dev": "cargo tauri dev --features default",
     "build": "cargo tauri build --no-bundle",
     "bundle:msi": "cargo tauri build --no-sign --bundles msi",
     "ui:dev": "bun run --filter @koharu/bridge build:dev && bun run --parallel --filter '@koharu/*' dev",
     "ui:build": "bun run --filter @koharu/bridge build && bun run --filter @koharu/app build",
+    "docs": "bun run --filter @koharu/docs dev",
     "docs:dev": "cd docs && uvx --from zensical==0.0.43 zensical serve",
     "docs:build": "cd docs && uvx --from zensical==0.0.43 zensical build",
+
     "lint": "bun run --filter '@koharu/*' lint",
     "test": "bun run --filter @koharu/app test",
     "sponsors": "cd .github/sponsorkit && sponsorkit --force",
