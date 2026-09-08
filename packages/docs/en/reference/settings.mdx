@@ -14,6 +14,8 @@ Choose **Light**, **Dark**, or **System**, and the desktop interface language. T
 
 Choose detection, OCR, and inpainting processors. The selected processor exposes its own options, such as class thresholds or generative prompts. Processor profiles are retained independently.
 
+Enable **Use official PyTorch builds**. This replaces Koharu's bundled build with the official one and may improve CPU inference speed. Official builds are stored separately in the package cache, and the change applies on the next launch.
+
 ## Providers
 
 Configure a connection listed in [translation providers](/en/models/providers). Credentials use the operating system credential service; URLs and other non-secret options use the shared configuration. Provider changes refresh model discovery.
