@@ -10,7 +10,8 @@ use koharu_scene::{Commit, EntityId, Snapshot, TextLayout as SceneTextLayout};
 use schemars::{JsonSchema, schema_for};
 use serde::Deserialize;
 use serde_json::{Value, json};
-use tauri::{AppHandle, Cef, Manager as _};
+use tauri::{AppHandle, Manager as _};
+use tauri_runtime_cef::CefRuntime;
 
 use crate::commands::{
     ChannelExt as _,
@@ -24,11 +25,11 @@ use crate::commands::{
 
 #[derive(Clone)]
 pub(crate) struct KoharuHost {
-    handle: AppHandle<Cef>,
+    handle: AppHandle<CefRuntime>,
 }
 
 impl KoharuHost {
-    pub(crate) fn new(handle: AppHandle<Cef>) -> Self {
+    pub(crate) fn new(handle: AppHandle<CefRuntime>) -> Self {
         Self { handle }
     }
 

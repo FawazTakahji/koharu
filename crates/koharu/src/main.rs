@@ -18,7 +18,7 @@ struct Cli {
 }
 
 #[tokio::main]
-#[tauri::cef_entry_point]
+#[tauri_runtime_cef::cef_entry_point]
 async fn main() {
     #[cfg(target_os = "windows")]
     {
