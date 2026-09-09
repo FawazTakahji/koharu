@@ -67,7 +67,6 @@ pub(crate) async fn initialize(handle: AppHandle<CefRuntime>) -> Result<()> {
 
 pub fn run(context: tauri::Context<CefRuntime>, mcp_port: u16) -> Result<()> {
     let cef = Cef::default();
-    let attrs = tauri::CefRuntimeAttributes::default();
     #[cfg(debug_assertions)]
     let cef = cef.remote_debugging(tauri_runtime_cef::RemoteDebugging::Port {
         port: 4000,

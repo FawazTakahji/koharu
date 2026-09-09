@@ -12,7 +12,8 @@ use rmcp::transport::streamable_http_server::{
 use rmcp::{ErrorData as McpError, RoleServer, ServerHandler};
 use serde_json::json;
 use std::borrow::Cow;
-use tauri::{AppHandle, Cef};
+use tauri::AppHandle;
+use tauri_runtime_cef::CefRuntime;
 use uuid::Uuid;
 
 use crate::commands::agent::KoharuHost;
@@ -39,7 +40,7 @@ pub(crate) struct KoharuMcp {
 }
 
 impl KoharuMcp {
-    pub(crate) fn new(handle: AppHandle<Cef>) -> Self {
+    pub(crate) fn new(handle: AppHandle<CefRuntime>) -> Self {
         Self {
             host: KoharuHost::new(handle),
         }
@@ -136,7 +137,7 @@ impl ServerHandler for KoharuMcp {
 }
 
 /// Run the MCP server until the application exits. A port of `0` disables it.
-pub(crate) async fn serve(handle: AppHandle<Cef>, port: u16) -> Result<()> {
+pub(crate) async fn serve(handle: AppHandle<CefRuntime>, port: u16) -> Result<()> {
     if port == 0 {
         tracing::info!("MCP server is disabled");
         return Ok(());
